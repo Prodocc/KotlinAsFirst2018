@@ -61,7 +61,7 @@ fun main(args: Array<String>) {
  * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
  */
 fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
-    return hours*3600+minutes*60+seconds
+    return hours*3600+minutes*60+seconds;
 }
 
 
@@ -83,7 +83,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
-    return (grad.toDouble()+(min.toDouble()+sec.toDouble()/60)/60)* PI/180
+    return (grad.toDouble()+(min.toDouble()+sec.toDouble()/60)/60)* PI/180;
 }
 
 /**
@@ -127,6 +127,7 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double {
+    //initial*(1+percent)^3
   return  initial* pow((1+percent/100.0),3.0)
 
 }
@@ -137,9 +138,9 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
  * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
  */
 fun numberRevert(number: Int): Int{
-    val a = number%10
-    val b = (number/100)%10
-    val c = (number/10)%10
+    val a = number%10//8
+    val b = (number/100)%10//4
+    val c = (number/10)%10//7
     return 100*a+10*c+b
 }
 
