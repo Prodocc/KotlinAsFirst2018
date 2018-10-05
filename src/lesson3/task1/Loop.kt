@@ -130,7 +130,7 @@ fun lcm(m: Int, n: Int): Int {
 fun minDivisor(n: Int): Int {
     return if (isPrime(n)){
         n
-    }else {
+    }else{
         var a = 1
         do {
             a++
