@@ -131,7 +131,7 @@ fun minDivisor(n: Int): Int {
     return if (isPrime(n)){
         n
     }else {
-        var a = 2
+        var a = 1
         do {
             a++
         }while (n % a != 0)
