@@ -157,7 +157,7 @@ fun maxDivisor(n: Int): Int = n/ minDivisor(n)
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
     val min = min(n, m)
-    val max = max(n,m)
+    val max = max(n, m)
     for (i in 2 .. sqrt(min.toDouble()).toInt()) {
         if ((n % i == 0) && (m % i == 0)) {
             return false
