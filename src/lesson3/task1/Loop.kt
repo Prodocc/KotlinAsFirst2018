@@ -2,6 +2,8 @@
 package lesson3.task1
 
 import lesson1.task1.sqr
+import java.lang.Math.pow
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
@@ -70,7 +72,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var a = n
+    var a = abs(n)
     var result = 0
     do {
         a /= 10
@@ -93,13 +95,13 @@ fun fib(n: Int): Int {
     if (n == 1 || n == 2){
         return 1
     }else
-    while (i < n - 1){
+        while (i < n - 1){
         fibn = fib1 + fib2
         fib1 = fib2
         fib2 = fibn
         i++
     }
-    return fibn
+        return fibn
 }
 
 
@@ -110,16 +112,19 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var a = m
-    var b = n
-    val nok = a * b
-    while(a != b){
-        if(a > b){
-            a -= b
-        }else
-            b -= a
+    return m / nod(m,n) * n
+}
+
+fun nod(m: Int, n: Int): Int {
+    var a = max(m,n)
+    var b = min(m,n)
+    while (a != 0 && b != 0) {
+        a %= b
+        a += b
+        b = a - b
+        a -= b
     }
-    return nok/a
+    return a + b
 }
 
 /**
@@ -128,36 +133,21 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    return if (isPrime(n)){
-        n
-    }else{
-        var a = 1
-        do {
-            a++
-        }while (n % a != 0)
-        a
+    var a = 2
+    while (a <= n / 2) {
+        if (n % a == 0) break
+        a++
+    }
+    return if (a < n / 2) a else n
     }
 
-}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    return if (isPrime(n)){
-        1
-    }else {
-        var a = 0
-        for(i in 2..n){
-            if (n % i == 0 && i < n)
-                a = i
-        }
-        return a
-    }
-
-}
+fun maxDivisor(n: Int): Int = n/ minDivisor(n)
 /**
  * Простая
  *
@@ -167,12 +157,13 @@ fun maxDivisor(n: Int): Int {
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
     val min = min(n, m)
-    for (i in 2 .. min) {
+    val max = max(n,m)
+    for (i in 2 .. sqrt(min.toDouble()).toInt()) {
         if ((n % i == 0) && (m % i == 0)) {
             return false
         }
     }
-    return true
+        return (max % min) != 0 || min == 1
 }
 
 
@@ -303,28 +294,15 @@ fun squareSequenceDigit(n: Int): Int {
     var count = 0
     var i = 1
     var b = 0
-    val k : Int
     while (count < n){
         b=sqr(i)
         count += digitNumber(b)
         i++
     }
-    when {
-        n == count -> b %= 10
-        count - (count - digitNumber(b)) in 1..2 -> {
-            k = count - n
-            for(j in 1..k)
-                b /= 10
-        }
-        else -> {
-            k = count -(count - digitNumber(b))
-            for(j in 1..k){
-                b /= 10
-            }
-        }
+    return b / pow(10.0, (count - n).toDouble()).toInt() % 10
+
     }
-    return b
-}
+
 
 /**
  * Сложная
