@@ -101,7 +101,7 @@ fun fib(n: Int): Int {
         fib2 = fibn
         i++
     }
-        return fibn
+    return fibn
 }
 
 
@@ -112,12 +112,12 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    return m / nod(m,n) * n
+    return m / nod(m, n) * n
 }
 
 fun nod(m: Int, n: Int): Int {
-    var a = max(m,n)
-    var b = min(m,n)
+    var a = max(m, n)
+    var b = min(m, n)
     while (a != 0 && b != 0) {
         a %= b
         a += b
@@ -133,13 +133,11 @@ fun nod(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var a = 2
-    while (a <= n / 2) {
-        if (n % a == 0) break
-        a++
-    }
-    return if (a < n / 2) a else n
-    }
+    for (i in 2..sqrt(n.toDouble()).toInt())
+        if (n % i == 0)
+            return i
+    return n
+}
 
 
 /**
@@ -147,7 +145,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = n/ minDivisor(n)
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 /**
  * Простая
  *
@@ -163,7 +161,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
             return false
         }
     }
-        return (max % min) != 0 || min == 1
+    return (max % min) != 0 || min == 1
 }
 
 
@@ -205,8 +203,8 @@ fun collatzSteps(x: Int): Int {
     while(a != 1){
         if (a % 2 == 0){
             a /= 2
-        }else{
-         a = 3 * a + 1
+            }else {
+            a = 3 * a + 1
         }
         count++
     }
@@ -277,7 +275,7 @@ fun hasDifferentDigits(n: Int): Boolean {
         a /= 10
     }
     return false
-    }
+}
 
 
 
@@ -300,8 +298,7 @@ fun squareSequenceDigit(n: Int): Int {
         i++
     }
     return b / pow(10.0, (count - n).toDouble()).toInt() % 10
-
-    }
+}
 
 
 /**
