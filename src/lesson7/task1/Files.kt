@@ -1,7 +1,6 @@
 @file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
 
 package lesson7.task1
-
 import java.io.File
 
 /**
@@ -54,7 +53,26 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val map = mutableMapOf<String,Int>()
+    var count = 0
+    for (elem in substrings){
+        for (line in File(inputName).readLines()){
+            if (elem.count() < 2){
+                for (word in line.split(" ")){
+                    count += word.length - word.replace(elem,"",ignoreCase = true).length
+                }
+            }else {
+                if (line.toLowerCase().contains(elem.toLowerCase())){
+                    count++
+                }
+            }
+        }
+        map.put(elem,count)
+        count = 0
+    }
+    return map
+}
 
 
 /**
@@ -71,7 +89,35 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    var outputStream = File(outputName).bufferedWriter()
+    for (line in File(inputName).readLines()){
+        outputStream.write(line.replace(Regex("""([жшщч])([ыюя])""", RegexOption.IGNORE_CASE)) {
+            val secondSymb = it.groupValues[2][0]
+            it.groupValues[1] + when (secondSymb.toLowerCase()) {
+                'ы' -> if (it.groupValues[2].matches(Regex("""[А-Я]"""))){
+                    "И"
+                }else
+                {
+                    "и"
+                }
+                'я' -> if (it.groupValues[2].matches(Regex("""[А-Я]"""))){
+                    "А"
+                }else
+                {
+                    "а"
+                }
+                'ю' -> if (it.groupValues[2].matches(Regex("""[А-Я]"""))){
+                    "У"
+                }else
+                {
+                    "у"
+                }
+                else -> ""
+            }
+        })
+        outputStream.newLine()
+    }
+    outputStream.close()
 }
 
 /**
@@ -92,7 +138,24 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val outputStream = File(outputName).bufferedWriter()
+    var maxLineLength = 0
+    for (line in File(inputName).readLines()) {
+        if (line.count() > maxLineLength) {
+            maxLineLength = line.count()
+        }
+    }
+    for (line in File(inputName).readLines()){
+        var temp = line.trim()
+        val strlength = temp.count()
+        val spacecount = ((maxLineLength - strlength)/2)
+        for (i in 0 until spacecount){
+            temp = " $temp"
+        }
+        outputStream.write(temp)
+        outputStream.newLine()
+    }
+    outputStream.close()
 }
 
 /**
