@@ -3,7 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson3.task1.minDivisor
 import java.lang.Math.pow
 import java.util.*
 import kotlin.math.sqrt
@@ -119,11 +118,9 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * Модуль пустого вектора считать равным 0.0.
  */
 fun abs(v: List<Double>): Double {
-    if (v.isEmpty())
-        return 0.0
     var a  = 0.0
     for(element in v){
-        a += element*element
+        a += element * element
     }
     return sqrt(a)
 }
@@ -159,8 +156,6 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
 fun times(a: List<Double>, b: List<Double>): Double {
-    if (a.isEmpty() && b.isEmpty())
-        return 0.0
     var c = 0.0
     for (i in 0 until a.size){
         c += a[i]*b[i]
@@ -177,11 +172,9 @@ fun times(a: List<Double>, b: List<Double>): Double {
  * Значение пустого многочлена равно 0.0 при любом x.
  */
 fun polynom(p: List<Double>, x: Double): Double {
-    if (p.isEmpty())
-        return 0.0
-    var d = p[0]
-    for (i in 1 until p.size){
-        d += p[i]* pow(x, i.toDouble())
+    var d = 0.0
+    for (i in 0 until p.size){
+        d += p[i] * pow(x, i.toDouble())
     }
     return d
 }
@@ -197,10 +190,8 @@ fun polynom(p: List<Double>, x: Double): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
-    if (list.isEmpty())
-        return list
     for (i in 1 until list.size){
-        list[i] = list[i] + list[i-1]
+        list[i] = list[i] + list[i - 1]
     }
     return list
 }
@@ -217,13 +208,23 @@ fun factorize(n: Int): List<Int> {
     var n = n
     var a : Int
     var i = 0
+    var arg = 2
     while (n != 1){
-        a = minDivisor(n)
+        a = minDivisor(n, arg)
         number.add(i, a)
         n /= a
         i++
+        arg = a
     }
     return number
+}
+
+fun minDivisor(n: Int, i: Int): Int {
+    for (k in i..sqrt(n.toDouble()).toInt()){
+        if (n % k == 0)
+        return k
+    }
+    return n
 }
 
 /**
@@ -250,7 +251,7 @@ fun convert(n: Int, base: Int): List<Int> {
         numbers.add(a % base)
         a /= base
     } while(a != 0)
-    return(numbers.reversed())
+    return numbers.reversed()
 }
 
 /**
@@ -262,15 +263,14 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
+    val sb = StringBuilder()
     var str = ""
     val list1 = convert(n, base)
     for (i in 0 until list1.size) {
-        if (list1[i] <= 9) {
-            str += ('0' + list1[i])
+        str = if (list1[i] <= 9) {
+            sb.append(('0' + list1[i])).toString()
         }else
-            if (list1[i] > 9){
-                str += (87 + list1[i]).toChar()
-            }
+            sb.append((87 + list1[i]).toChar()).toString()
     }
     return str
 }
@@ -284,8 +284,8 @@ fun convertToString(n: Int, base: Int): String {
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var a = 0.0
-    for (i in 0 until digits.size){
-        a += digits[i]* pow(base.toDouble(),digits.size.toDouble()- 1 - i)
+    for ((i, elem) in digits.withIndex()){
+        a += elem * pow(base.toDouble(),digits.size.toDouble() - 1 - i)
     }
     return a.toInt()
 }
@@ -302,42 +302,12 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
     for (i in 0 until str.length){
-        if (str[i] - '0'<=9){
+        if (str[i] - '0' <= 9){
             list.add(str[i] - '0')
         }else
-            if (str[i] - '0' > 9){
-                when (str[i]){
-                    'a' -> list.add(10)
-                    'b' -> list.add(11)
-                    'c' -> list.add(12)
-                    'd' -> list.add(13)
-                    'e' -> list.add(14)
-                    'f' -> list.add(15)
-                    'g' -> list.add(16)
-                    'h' -> list.add(17)
-                    'i' -> list.add(18)
-                    'j' -> list.add(19)
-                    'k' -> list.add(20)
-                    'l' -> list.add(21)
-                    'm' -> list.add(22)
-                    'n' -> list.add(23)
-                    'o' -> list.add(24)
-                    'p' -> list.add(25)
-                    'q' -> list.add(26)
-                    'r' -> list.add(27)
-                    's' -> list.add(28)
-                    't' -> list.add(29)
-                    'u' -> list.add(30)
-                    'v' -> list.add(31)
-                    'w' -> list.add(32)
-                    'x' -> list.add(33)
-                    'y' -> list.add(34)
-                    'z' -> list.add(35)
-                }
-            }
-
+            list.add(str[i] - 'a' + 10)
     }
-    return(decimal(list,base))
+    return decimal(list,base)
 }
 
 /**
