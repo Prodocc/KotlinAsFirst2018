@@ -177,13 +177,21 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    return try {
-        if (jumps.contains(Regex("""[^-\d\s%]"""))){
+    try {
+        if (jumps.contains(Regex("""[^-\d\s%]"""))) {
             throw NumberFormatException()
         }
-        return jumps.replace(Regex("""[-%]"""),"").split(" ").max()!!.toInt()
-    }catch (e: NumberFormatException){
-        -1
+        val a = jumps.replace(Regex("""[-%]"""), "").replace(Regex("""\s+"""), " ").trim().split(" ")
+        var max = 0
+        for (i in 0 until a.size) {
+            if (a[i].toInt() > max) {
+                max = a[i].toInt()
+            }
+
+        }
+        return max
+    } catch (e: Exception) {
+        return -1
     }
 }
 
@@ -212,6 +220,9 @@ fun bestHighJump(jumps: String): Int {
                 }
             }
         }
+        if (max == 0){
+            -1
+        }else
         max
     }catch (e: NumberFormatException){
         -1
@@ -236,7 +247,7 @@ fun isDigit(s: String): Boolean{
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    if (!expression.matches(Regex("""\d(?:\s*[-+]\s*\d+)*"""))){
+    if (!expression.matches(Regex("""\d+(?:\s*[-+]\s*\d+)*"""))){
         throw IllegalArgumentException()
     }else
         return(expression.replace(" ","").split(Regex("""(?=[-+])""")).sumBy { it.toInt() })
@@ -254,7 +265,7 @@ fun plusMinus(expression: String): Int {
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
 fun firstDuplicateIndex(str: String): Int {
-    val matchResult = Regex("""([а-я]+)\s\1""").find(str.toLowerCase())
+    val matchResult = Regex("""([а-яА-Яa-zA-Z]+)\s\1""").find(str.toLowerCase())
     return matchResult?.range?.first ?: -1
 }
 
