@@ -65,13 +65,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
-    return when {
-        age in 11..14 || age in 111..114-> "$age лет"
+fun ageDescription(age: Int): String = when {
+        age in 11..14 || age in 111..114 -> "$age лет"
         age % 10 == 1 -> "$age год"
-        age % 10 in 2..4-> "$age года"
+        age % 10 in 2..4 -> "$age года"
         else -> "$age лет"
-    }
 }
 /**
  * Простая
@@ -86,12 +84,12 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val s1 = t1 * v1
     val s2 = t2 * v2
     val s3 = t3 * v3
-    val S = s1 + s2 + s3
-    val polS = S/2
+    val fullS = s1 + s2 + s3
+    val halfS = fullS / 2
     return when {
-        polS<= s1 -> polS / v1
-        polS<= s1 + s2 -> t1+(polS - s1)/v2
-        else -> t1 + t2 +(polS- s1 - s2)/v3
+        halfS <= s1 -> halfS / v1
+        halfS <= s1 + s2 -> t1 + (halfS - s1) / v2
+        else -> t1 + t2 +(halfS - s1 - s2) / v3
     }
 }
 
@@ -130,7 +128,7 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
 
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int):Int {
+                          bishopX: Int, bishopY: Int): Int {
     val con1 = (abs(kingX - bishopX) == abs(kingY - bishopY))
     val con2 = (kingX == rookX || kingY == rookY)
     return when {
@@ -152,9 +150,9 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-        val min = minOf(a, b, c)
-        val max = maxOf(a, b, c)
-        val avr = (a + b + c) - min - max
+    val min = minOf(a, b, c)
+    val max = maxOf(a, b, c)
+    val avr = (a + b + c) - min - max
     return when {
         (a + b < c || a + c < b || b + c < a) -> -1
         sqr(max) < (sqr(min) + sqr(avr)) -> 0
