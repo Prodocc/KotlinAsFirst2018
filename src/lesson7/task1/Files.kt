@@ -60,7 +60,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
         for (line in File(inputName).readLines()){
             if (elem.count() < 2){
                 for (word in line.split(" ")){
-                    count += word.length - word.replace(elem,"",ignoreCase = true).length
+                    count += word.length - word.replace(elem.toLowerCase(),"",ignoreCase = true).length
                 }
             }else {
                 if (line.toLowerCase().contains(elem.toLowerCase())){
@@ -89,7 +89,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    var outputStream = File(outputName).bufferedWriter()
+    val outputStream = File(outputName).bufferedWriter()
     for (line in File(inputName).readLines()){
         outputStream.write(line.replace(Regex("""([жшщч])([ыюя])""", RegexOption.IGNORE_CASE)) {
             val secondSymb = it.groupValues[2][0]
