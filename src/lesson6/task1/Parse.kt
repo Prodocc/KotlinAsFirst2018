@@ -212,6 +212,9 @@ fun bestHighJump(jumps: String): Int {
         if (jumps.contains(Regex("""[^-+\d\s%]"""))){
             throw NumberFormatException()
         }
+        if (!jumps.contains(Regex("""[+]"""))){
+            return -1
+        }
         val str = jumps.replace(Regex("[-%]"),"").split(" ")
         for (i in 0 until str.size){
             if (isDigit(str[i]) && str[i + 1] == "+"){
@@ -220,9 +223,6 @@ fun bestHighJump(jumps: String): Int {
                 }
             }
         }
-        if (max == 0){
-            -1
-        }else
         max
     }catch (e: NumberFormatException){
         -1
