@@ -154,14 +154,8 @@ fun maxDivisor(n: Int): Int = n / minDivisor(n)
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    val min = min(n, m)
-    val max = max(n, m)
-    for (i in 2 .. sqrt(min.toDouble()).toInt()) {
-        if ((n % i == 0) && (m % i == 0)) {
-            return false
-        }
-    }
-    return (max % min) != 0 || min == 1
+    if (nod(m,n) == 1) return true
+    return false
 }
 
 
@@ -203,7 +197,8 @@ fun collatzSteps(x: Int): Int {
     while(a != 1){
         if (a % 2 == 0){
             a /= 2
-            }else {
+        }else
+        {
             a = 3 * a + 1
         }
         count++
@@ -240,7 +235,7 @@ fun revert(n: Int): Int {
     var x = n
     var y = 0
     while(x > 0){
-        y= y * 10 + x % 10
+        y = y * 10 + x % 10
         x /= 10
     }
     return y
