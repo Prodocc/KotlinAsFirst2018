@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import lesson4.task1.mean
+
 /**
  * Пример
  *
@@ -134,19 +136,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b.entr
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    var keys = stockPrices.toMap().keys
-    var map = mutableMapOf<String,Double>()
-    var sum = 0.0
-    for (elem in keys){
-        for (i in 0 until stockPrices.size){
-            if (elem == stockPrices[i].first){
-                sum += stockPrices[i].second
-            }
-        }
-        map.put(elem, sum / stockPrices.count { it.first == elem })
-        sum = 0.0
-    }
-    return map
+    val result = stockPrices.groupBy ({ it.first },{it.second}).mapValues { mean(it.value) }
+    return result
 }
 
 /**
@@ -165,13 +156,18 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var str = ""
-    for (i in 0 until stuff.size){
-        if (stuff.values.toList()[i].second == stuff.values.toList().minBy { it.first == kind }!!.second
-        && stuff.toList()[i].second.first == kind){
-            str = stuff.keys.toList()[i]
-            return str
-        }
+//    var str = " "
+//    for (i in 0 until stuff.size){
+//        if (stuff.values.toList()[i].second == stuff.values.toList().minBy { it.first == kind }!!.second
+//        && stuff.toList()[i].second.first == kind){
+//            str = stuff.keys.toList()[i]
+//            return str
+//        }
+//    }
+//    return null
+    for (elem in stuff){
+        if (elem.value == stuff.values.minBy { it.second }  && elem.value.first == kind)
+            return elem.key
     }
     return null
 }
