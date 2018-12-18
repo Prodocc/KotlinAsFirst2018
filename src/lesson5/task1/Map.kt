@@ -3,7 +3,6 @@
 package lesson5.task1
 
 import lesson4.task1.mean
-import java.util.*
 
 
 /**
@@ -269,13 +268,12 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val list = mutableListOf<SortedSet<Char>>()
-    for (word in words){
-        val sortedWord = word.toSortedSet()
-        if (list.contains(sortedWord)){
-            return true
-        }else
-            list.add(sortedWord)
+    for (i in 0 until words.size){
+        for (k in i + 1 until words.size){
+            if (words[i].toSet() == words[k].toSet())
+                return true
+        }
+
     }
     return false
 }
