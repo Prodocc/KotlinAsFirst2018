@@ -76,14 +76,24 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = TODO()
+    fun distance(other: Circle): Double {
+        if (center.distance(other.center) < (radius + other.radius)){
+            return 0.0
+        }
+        return center.distance(other.center) - radius - other.radius
+    }
 
     /**
      * Тривиальная
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean {
+        if ((p.distance(center) == radius) || p.distance(center) < radius) {
+            return true
+        }
+        return false
+    }
 }
 
 /**
@@ -103,7 +113,19 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    if (points.count() < 2){
+        throw IllegalArgumentException()
+    }
+    var mSeg = Segment(points[0], points[1])
+    val max = points[0].distance(points[1])
+    for (i in 0 until points.size - 1){
+        if (points[i].distance(points[i + 1]) > max){
+            mSeg = Segment(points[i], points[i + 1])
+        }
+    }
+    return mSeg
+}
 
 /**
  * Простая
@@ -111,8 +133,11 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
-
+fun circleByDiameter(diameter: Segment): Circle {
+    val center = Point(((diameter.begin.x + diameter.end.x) / 2), ((diameter.begin.y + diameter.end.y) / 2))
+    val radius = (diameter.begin.distance(diameter.end)) / 2
+    return Circle(center, radius)
+}
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
  * Уравнение прямой: (y - point.y) * cos(angle) = (x - point.x) * sin(angle)
