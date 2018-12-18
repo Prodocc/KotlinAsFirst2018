@@ -264,15 +264,14 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     val sb = StringBuilder()
-    var str = ""
     val list1 = convert(n, base)
     for (i in 0 until list1.size) {
-        str = if (list1[i] <= 9) {
+         if (list1[i] <= 9) {
             sb.append(('0' + list1[i])).toString()
         }else
-            sb.append((87 + list1[i]).toChar()).toString()
+            sb.append(('W' + list1[i])).toString()
     }
-    return str
+    return sb.toString()
 }
 
 /**
@@ -284,8 +283,8 @@ fun convertToString(n: Int, base: Int): String {
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var a = 0.0
-    for ((i, elem) in digits.withIndex()){
-        a += elem * pow(base.toDouble(),digits.size.toDouble() - 1 - i)
+    for (i in 0 until digits.size){
+        a += digits[i] * pow(base.toDouble(),digits.size.toDouble() - 1 - i)
     }
     return a.toInt()
 }
@@ -343,7 +342,7 @@ fun roman(n: Int): String {
                 a = key
             }
         }
-        rimnum+= numbers[a]
+        rimnum  += numbers[a]
         number -= a
     }
     return rimnum
