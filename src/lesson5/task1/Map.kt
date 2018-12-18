@@ -3,6 +3,8 @@
 package lesson5.task1
 
 import lesson4.task1.mean
+import java.util.*
+
 
 /**
  * Пример
@@ -136,7 +138,11 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = b.entr
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val result = stockPrices.groupBy ({ it.first },{it.second}).mapValues { mean(it.value) }
+    val map = stockPrices.groupBy ({ it.first }, { it.second})
+    val result = mutableMapOf<String,Double>()
+    for (elem in map){
+        result.put(elem.key, mean(elem.value))
+    }
     return result
 }
 
@@ -156,15 +162,6 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-//    var str = " "
-//    for (i in 0 until stuff.size){
-//        if (stuff.values.toList()[i].second == stuff.values.toList().minBy { it.first == kind }!!.second
-//        && stuff.toList()[i].second.first == kind){
-//            str = stuff.keys.toList()[i]
-//            return str
-//        }
-//    }
-//    return null
     for (elem in stuff){
         if (elem.value == stuff.values.minBy { it.second }  && elem.value.first == kind)
             return elem.key
@@ -196,13 +193,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val friendsOne = mutableMapOf<String,Set<String>>()
-    for (elem in friends.keys.toSet()){
-        friendsOne.put(elem, friends.keys.toSet() - elem)
-    }
-    return friendsOne
-}
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
 
 /**
  * Простая
@@ -240,15 +231,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a.toSet().in
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-   if (word.toSet() == chars.map { it.toLowerCase() }.toSet()){
-       return true
-   }else
-       if (word.isEmpty()){
-           return true
-       }
-    return false
-}
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = chars.map { it.toLowerCase() }
+        .toSet().containsAll(word.toLowerCase().toSet())
 
 /**
  * Средняя
@@ -263,11 +247,12 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
 fun extractRepeats(list: List<String>): Map<String, Int> {
-    val set = list.toMutableSet()
+    val set = list.toSet()
     val map = mutableMapOf<String,Int>()
     for(elem in set){
-        if(list.count { it == elem } > 1){
-            map.put(elem,list.count { it == elem })
+        val count = list.count{it === elem}
+        if(count > 1){
+            map.put(elem, count)
         }
     }
     return map
@@ -284,12 +269,13 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    for (i in 0 until words.size){
-        for (k in i + 1 until words.size){
-            if (words[i].toSet() == words[k].toSet())
-                return true
-        }
-
+    val list = mutableListOf<SortedSet<Char>>()
+    for (word in words){
+        val sortedWord = word.toSortedSet()
+        if (list.contains(sortedWord)){
+            return true
+        }else
+            list.add(sortedWord)
     }
     return false
 }
@@ -312,13 +298,20 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val pair = mutableMapOf<Int,Int>()
-    for ((key,value)in list.withIndex()){
-        val result = pair[number - value]
-        if (result == null){
-            pair[value] = key
-        }else
-            return Pair(result,key)
+    if (list.isEmpty()){
+        return -1 to -1
+    }
+    val sList = list.sorted()
+    var sum : Int
+    var fIndex = 0
+    var lIndex = sList.size - 1
+    while (fIndex != lIndex){
+        sum = sList[fIndex] + sList[lIndex]
+        when {
+            number == sum -> return fIndex to lIndex
+            number < sum -> lIndex--
+            else -> fIndex++
+        }
     }
     return -1 to -1
 }
