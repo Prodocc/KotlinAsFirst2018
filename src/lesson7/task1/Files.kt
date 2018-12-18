@@ -57,21 +57,15 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     val map = mutableMapOf<String,Int>()
     var count = 0
     for (elem in substrings){
-        for (line in File(inputName).readLines()){
-            if (elem.count() < 2){
-                for (word in line.split(" ")){
-                    count += word.length - word.replace(elem.toLowerCase(),"",ignoreCase = true).length
-                }
-            }else {
-                if (line.toLowerCase().contains(elem.toLowerCase())){
-                    count++
-                }
-            }
+        for(line in File(inputName).readLines()){
+            val matchResult = Regex(elem,RegexOption.IGNORE_CASE).findAll(line)
+            count += matchResult.count()
         }
-        map.put(elem,count)
+        map.put(elem, count)
         count = 0
     }
     return map
+
 }
 
 
@@ -146,9 +140,12 @@ fun centerFile(inputName: String, outputName: String) {
         }
     }
     for (line in File(inputName).readLines()){
-        var temp = line.trim()
+       var temp = if (line.isEmpty()){
+            line
+        }else
+            line.trim()
         val strlength = temp.count()
-        val spacecount = ((maxLineLength - strlength)/2)
+        val spacecount = (maxLineLength - strlength) / 2
         for (i in 0 until spacecount){
             temp = " $temp"
         }
@@ -207,7 +204,23 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    val map = mutableMapOf<String,Int>()
+    val str = File(inputName).readText().replace(Regex("""([^А-Яа-яa-zA-ZёЁ])+""")," ").trim()
+    val list = str.toLowerCase().split(" ")
+    val set = list.toSet()
+    if (str.isEmpty()){
+        return mapOf()
+    }
+    for (elem in set){
+        map.put(elem, list.count { it == elem })
+    }
+    val result = map.toList().sortedByDescending { (_, value) -> value }
+    if (result.count() < 20){
+        return result.toMap()
+    }
+    return result.subList(0,20).toMap()
+}
 
 /**
  * Средняя
@@ -273,7 +286,16 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val outputStream = File(outputName).bufferedWriter()
+    val list = mutableListOf<String>()
+    for (line in File(inputName).readLines()){
+        if (line.toLowerCase().toSet().count() == line.count()){
+            list.add(line)
+        }
+    }
+    val max = list.maxBy { it.count() }!!.count()
+    outputStream.write(list.filter { it.count() == max }.joinToString(separator = ", "))
+    outputStream.close()
 }
 
 /**
